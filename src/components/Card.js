@@ -50,7 +50,7 @@ const card = props => {
               }}
               onClick={props.addToFavorites}
             >
-              Add to Favorites
+              {props.favoritesClick}
             </p>
             <p className="card-text">{props.explanation}</p>
             <small className="text-muted">

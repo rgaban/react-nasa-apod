@@ -37,7 +37,7 @@ class App extends Component {
     this.setState({ loading: false, page: 'results', resultsArr: resArray });
   }
 
-  handleFavoritesClick(i) {
+  handleAddToFavoritesClick(i) {
     let newFavorites = {...this.state.favorites}
     this.state.resultsArr.forEach(item => {
       if (item.url.includes(i) && !newFavorites[i]) {
@@ -47,10 +47,11 @@ class App extends Component {
     });
   }
 
-  removeFavorite(i) {
+  handleRemoveFromFavoritesClick(i) {
     let newFavorites = {...this.state.favorites};
     if (newFavorites[i]) {
-      delete this.state.favorites[i];
+      delete newFavorites[i];
+      this.setState({ favorites: newFavorites });
     }
   }
 
@@ -64,7 +65,12 @@ class App extends Component {
         title={i.title}
         date={i.date}
         copyright={i.copyright === undefined ? '' : i.copyright}
-        addToFavorites={() => this.handleFavoritesClick(i.url)}
+        addToFavorites={() => {
+          this.state.page === 'results' ?
+            this.handleAddToFavoritesClick(i.url) :
+            this.handleRemoveFromFavoritesClick(i.url);
+        }}
+        favoritesClick={this.state.page === 'results' ? 'Add to Favorites' : 'Remove Favorite'}
       />
     );
   }
@@ -99,7 +105,7 @@ class App extends Component {
           </div>
         </div>
       }
-      <Saved hidden/>
+      { /* <Saved /> */ }
       </div>
     );
   }
