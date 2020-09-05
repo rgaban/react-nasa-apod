@@ -18,6 +18,7 @@ class App extends Component {
       page: 'results',
       resultsArr: [],
       favorites: {},
+      isActive: false,
     };
   }
 
@@ -43,8 +44,13 @@ class App extends Component {
       if (item.url.includes(i) && !newFavorites[i]) {
         newFavorites[i] = item;
       }
-      this.setState({ favorites: newFavorites });
+      this.setState({ favorites: newFavorites, isActive: true });
+      setTimeout(() => {
+        this.setState({ isActive: false });
+      }, 2000);
+
     });
+
   }
 
   handleRemoveFromFavoritesClick(i) {
@@ -88,14 +94,16 @@ class App extends Component {
         <Loader />  :
         <div className="container">
           <NavigationContainer>
-            <Navigation name="resultsNav">
-              <Clickable click={() => this.renderFavorites()}>Favorites</Clickable>
-              <h3>&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
-              <Clickable click={() => this.fetchData()}>Load More</Clickable>
-            </Navigation>
-            <Navigation name="favoritesNav">
-                <Clickable click={() => this.fetchData()}>Load More NASA Images</Clickable>
-            </Navigation>
+            {this.state.page === 'results' ?
+              <Navigation name="resultsNav">
+                <Clickable click={() => this.renderFavorites()}>Favorites</Clickable>
+                <h3>&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
+                <Clickable click={() => this.fetchData()}>Load More</Clickable>
+              </Navigation> :
+              <Navigation name="favoritesNav">
+                  <Clickable click={() => this.fetchData()}>Load More NASA Images</Clickable>
+              </Navigation>
+            }
           </NavigationContainer>
           <div className="images-container">
           {this.state.page === 'results' ?
@@ -105,7 +113,7 @@ class App extends Component {
           </div>
         </div>
       }
-      { /* <Saved /> */ }
+      {this.state.isActive ? <Saved/> : null}
       </div>
     );
   }

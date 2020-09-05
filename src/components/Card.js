@@ -55,6 +55,7 @@ const card = props => {
             <p className="card-text">{props.explanation}</p>
             <small className="text-muted">
               <strong>{props.date}</strong>
+              <span>&nbsp;</span>
               <span>{props.copyright}</span>
             </small>
           </div>
