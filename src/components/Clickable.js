@@ -1,19 +1,16 @@
 import React from 'react';
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 
 const clickable = props => {
     return (
         <h3
-            css={{
-                color: 'dodgerblue',
-                cursor: 'pointer',
-                userSelect: 'none',
-                '&:hover': {
-                    color: 'rgb(4, 108, 212)'
-                }
-            }}
+            css={css`
+                color: dodgerblue;
+                cursor: pointer;
+                user-select: none;
+            `}
             onClick={props.click}
         >
             {props.children}

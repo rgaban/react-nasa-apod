@@ -5,6 +5,7 @@ import Navigation from '../components/Navigation';
 import Clickable from '../components/Clickable';
 import Loader from '../components/Loader';
 import Saved from '../components/Saved';
+import CardList from '../components/CardList';
 import './App.css';
 
 /** @jsx jsx */
@@ -23,7 +24,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();
+    try {
+      this.fetchData();
+    } catch (err) {
+
+    }
   }
 
   async fetchData() {
@@ -43,14 +48,15 @@ class App extends Component {
     this.state.resultsArr.forEach(item => {
       if (item.url.includes(i) && !newFavorites[i]) {
         newFavorites[i] = item;
+        // Render Added to Favorites timed popup message
+        this.setState({ favorites: newFavorites, isActive: true });
+        setTimeout(() => {
+          this.setState({ isActive: false });
+        }, 2000);
+        // Set item to localStorage
+        localStorage.setItem('nasaFavorites', JSON.stringify(newFavorites));
       }
-      this.setState({ favorites: newFavorites, isActive: true });
-      setTimeout(() => {
-        this.setState({ isActive: false });
-      }, 2000);
-
     });
-
   }
 
   handleRemoveFromFavoritesClick(i) {
@@ -58,7 +64,10 @@ class App extends Component {
     if (newFavorites[i]) {
       delete newFavorites[i];
       this.setState({ favorites: newFavorites });
+      // Remove item from localStorage
+      localStorage.setItem('nasaFavorites', JSON.stringify(newFavorites));
     }
+
   }
 
   renderCard(i) {
@@ -82,8 +91,12 @@ class App extends Component {
   }
 
   renderFavorites() {
+    let newFavorites;
     window.scrollTo({ top: 0, behavior: 'instant' });
-    let newFavorites = {...this.state.favorites}
+    // Get favorites from localStorage
+    if (localStorage.getItem('nasaFavorites')) {
+      newFavorites = JSON.parse(localStorage.getItem('nasaFavorites'));
+    }
     this.setState({ page: 'favorites', favorites: newFavorites });
   }
 
@@ -105,12 +118,12 @@ class App extends Component {
               </Navigation>
             }
           </NavigationContainer>
-          <div className="images-container">
-          {this.state.page === 'results' ?
-            this.state.resultsArr.map(result => this.renderCard(result)) :
-            Object.values(this.state.favorites).map(result => this.renderCard(result))
-          }
-          </div>
+          <CardList>
+            {this.state.page === 'results' ?
+              this.state.resultsArr.map(result => this.renderCard(result)) :
+              Object.values(this.state.favorites).map(result => this.renderCard(result))
+            }
+          </CardList>
         </div>
       }
       {this.state.isActive ? <Saved/> : null}
