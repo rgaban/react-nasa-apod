@@ -7,6 +7,8 @@ import Loader from '../components/Loader';
 import Saved from '../components/Saved';
 import CardList from '../components/CardList';
 import './App.css';
+import API_KEY from '../secret';
+
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
@@ -36,8 +38,7 @@ class App extends Component {
     this.setState({ loading: true, page: 'results', resultsArr: []
     });
     const count = 10;
-    const apiKey = "DEMO_KEY";
-    const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&count=${count}`;
+    const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&count=${count}`;
     const response = await fetch(apiUrl);
     const resArray = await response.json();
     this.setState({ loading: false, page: 'results', resultsArr: resArray });
