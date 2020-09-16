@@ -14,15 +14,12 @@ import API_KEY from '../secret';
 import { jsx } from '@emotion/core';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  state = {
       loading: true,
       page: 'results',
       resultsArr: [],
       favorites: {},
       isActive: false,
-    };
   }
 
   componentDidMount() {
